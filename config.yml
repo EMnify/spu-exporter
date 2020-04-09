@@ -1,0 +1,9 @@
+---
+prometheus:
+  outfile: "/tmp/spu_prometheus_metrics"
+ssh:
+  host: "localhost"
+  user: "admin"
+  keyfile: "/opt/spu/etc/ssh/users/admin/id_rsa"
+  port: 8822
+  command: "show diameter"

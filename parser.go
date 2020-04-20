@@ -8,7 +8,7 @@ import (
 )
 
 var StringFind = regexp.MustCompile(`\s*([a-z-]+) "?([a-zA-Z0-9-\.]+)"?`)
-var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)`)
+var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)$`)
 
 func parseLines(lines []string) ([]Transport, error) {
 	transportPattern := regexp.MustCompile(`transport (\d+)`)
@@ -144,12 +144,13 @@ func ParsePeer(p *Peer, line string) {
 	}
 	str := StringFind.FindStringSubmatch(line)
 	if str != nil {
-
 		switch str[1] {
 		case "destination-host":
 			p.DestinationHost = str[2]
 		case "destination-realm":
 			p.DestinationRealm = str[2]
+		case "remote-ip":
+			p.RemoteIp = str[2]
 		case "state":
 			p.State.Name = str[2]
 		}

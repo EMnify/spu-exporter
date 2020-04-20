@@ -1,0 +1,9 @@
+---
+prometheus:
+  outfile: "/tmp/spu_prometheus_metrics"
+ssh:
+  host: "localhost"
+  user: "vagrant"
+  keyfile: "/Users/wbauer/workspace/ansible/dev-test/.vagrant/machines/dev/virtualbox/private_key"
+  port: 2222
+  command: "cat example"

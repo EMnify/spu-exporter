@@ -4,9 +4,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/EMnify/spu-exporter/pkg/collector"
 	"github.com/EMnify/spu-exporter/pkg/config"
-	"github.com/EMnify/spu-exporter/pkg/scraper"
-
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
@@ -16,9 +15,9 @@ func main() {
 
 	cfg := config.ReadConfig("config.yml")
 	logger := setupLogging(cfg)
-	d := scraper.NewSpuMetricsDaemon(cfg, logger)
+	d := collector.NewSpuMetricsDaemon(cfg, logger)
 	// Currently config is not read correctly
-	trans,_ := d.ExecuteScrape()
+	trans, _ := d.ExecuteScrape()
 	// prometheus format
 	reg := createMetricLines(trans)
 	writeToFile(reg, cfg.Prometheus.Outfile)

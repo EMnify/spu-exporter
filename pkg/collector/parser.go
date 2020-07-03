@@ -1,7 +1,6 @@
 package collector
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -64,8 +63,6 @@ func ParseTransport(t *transport.Transport, line string) {
 		}
 		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
-		} else {
-			fmt.Println("no peer set")
 		}
 		return
 	}
@@ -77,7 +74,7 @@ func ParseTransport(t *transport.Transport, line string) {
 			t.OriginHost = str[2]
 		case "origin-realm":
 			t.OriginRealm = str[2]
-		case "protocoll":
+		case "protocol":
 			t.Protocol = str[2]
 		case "local-ip":
 			t.LocalIp = str[2]
@@ -85,8 +82,6 @@ func ParseTransport(t *transport.Transport, line string) {
 		}
 		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
-		} else {
-			fmt.Println("no peer set")
 		}
 
 		t.LastKey = str[1]

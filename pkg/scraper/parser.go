@@ -1,32 +1,34 @@
-package main
+package scraper
 
 import (
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/EMnify/spu-exporter/pkg/transport"
 )
 
 var StringFind = regexp.MustCompile(`\s*([a-z-]+) "?([a-zA-Z0-9-\.]+)"?`)
 var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)$`)
 
-func parseLines(lines []string) ([]Transport, error) {
+func parseLines(lines []string) ([]transport.Transport, error) {
 	transportPattern := regexp.MustCompile(`transport (\d+)`)
-	var currentTransport Transport
-	var trans []Transport
+	var currentTransport transport.Transport
+	var trans []transport.Transport
 
 	for _, line := range lines {
-		transport := transportPattern.FindStringSubmatch(line)
+		tp := transportPattern.FindStringSubmatch(line)
 
-		if transport != nil {
+		if tp != nil {
 			if &currentTransport != nil {
 				currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
-				currentTransport.CurrentPeer = Peer{}
+				currentTransport.CurrentPeer = transport.Peer{}
 				trans = append(trans, currentTransport)
 			}
-			i64, _ := strconv.ParseInt(transport[1], 10, 64)
+			i64, _ := strconv.ParseInt(tp[1], 10, 64)
 			num := int(i64)
-			currentTransport = Transport{}
+			currentTransport = transport.Transport{}
 			currentTransport.Number = num
 
 		} else {
@@ -38,13 +40,13 @@ func parseLines(lines []string) ([]Transport, error) {
 		}
 	}
 	currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
-	currentTransport.CurrentPeer = Peer{}
+	currentTransport.CurrentPeer = transport.Peer{}
 	trans = append(trans, currentTransport)
 
 	return trans, nil
 }
 
-func ParseTransport(t *Transport, line string) {
+func ParseTransport(t *transport.Transport, line string) {
 	n := IntFind.FindStringSubmatch(line)
 	if n != nil {
 		val, _ := strconv.ParseInt(n[2], 10, 64)
@@ -54,7 +56,7 @@ func ParseTransport(t *Transport, line string) {
 		case "receive-buffer":
 			t.ReceiveBuffer = val
 		case "peer":
-			t.CurrentPeer = Peer{}
+			t.CurrentPeer = transport.Peer{}
 			//t.Peers = append(t.Peers, t.CurrentPeer)
 		case "local-port":
 			t.LocalPort = val
@@ -90,7 +92,7 @@ func ParseTransport(t *Transport, line string) {
 		return
 	}
 	if strings.Contains(line, "client") {
-		t.CurrentPeer = Peer{}
+		t.CurrentPeer = transport.Peer{}
 	}
 	if strings.Contains(line, "{") {
 		asdf := regexp.MustCompile("[a-z-]+")
@@ -109,7 +111,7 @@ func ParseTransport(t *Transport, line string) {
 	return
 }
 
-func ParsePeer(p *Peer, line string) {
+func ParsePeer(p *transport.Peer, line string) {
 
 	//fmt.Println("parsing inside peer")
 	n := IntFind.FindStringSubmatch(line)

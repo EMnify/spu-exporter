@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/EMnify/spu-exporter/pkg/transport"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"strconv"
 )
 
-func createMetricLines(ts []Transport) *prometheus.Registry {
+func createMetricLines(ts *[]transport.Transport) *prometheus.Registry {
 	reg := prometheus.NewRegistry()
 	labels := []string{"transport", "origin_host", "destination_host", "remote_ip"}
 	state := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_state", Help: "State of the transport (labels okay, waiting, down with 1 or 0)"}, append(labels, "state"))
@@ -25,7 +27,7 @@ func createMetricLines(ts []Transport) *prometheus.Registry {
 	sendOct := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_oct_total", Help: "Number of bytes sent from the socket."}, labels)
 	reg.MustRegister(sendAvg, sendCnt, sendMax, sendOct, sendPend)
 
-	for _, t := range ts {
+	for _, t := range *ts {
 		if t.OriginHost != "" {
 			for _, p := range t.Peers {
 				switch p.State.Name {

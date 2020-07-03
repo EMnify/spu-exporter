@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/EMnify/spu-exporter/pkg/transport"
@@ -38,10 +37,7 @@ func TestParseLines(t *testing.T) {
 						t.Errorf("got different number of transports as parse result")
 					} else {
 						for i := range transports {
-							result, diff := compareTransportAssert(transports[i], tt.expectedTrans[i], t)
-							if !result {
-								t.Errorf("found difference in parsed transport in following fields: %s", diff)
-							}
+							compareTransport(transports[i], tt.expectedTrans[i], t)
 						}
 					}
 				}
@@ -65,10 +61,7 @@ func readFromFile(filename string) []string {
 	return lines
 }
 
-func compareTransportAssert(t1, t2 transport.Transport, t *testing.T) (bool, string) {
-	equal := true
-	diff := []string{}
-
+func compareTransport(t1, t2 transport.Transport, t *testing.T) {
 	assert.Equal(t, *t2.Number, *t1.Number, "Number expected to be the same")
 	assert.Equal(t, t2.Protocol, t1.Protocol, "Protocol expected to be the same")
 	assert.Equal(t, t2.OriginHost, t1.OriginHost, "OriginHost expected to be the same")
@@ -81,7 +74,6 @@ func compareTransportAssert(t1, t2 transport.Transport, t *testing.T) (bool, str
 		t.Errorf("Peer count expected to be the same, expected %d, was %d", len(t2.Peers), len(t1.Peers))
 	}
 
-	return equal, strings.Join(diff, ",")
 }
 
 func comparePeers(p1, p2 transport.Peer, t *testing.T) {

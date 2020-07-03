@@ -1,0 +1,27 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get application token to enable read access to EMnify repositories
+        id: get_token
+        uses: machine-learning-apps/actions-app-token@master
+        with:
+          APP_PEM: ${{ secrets.EMNIFY_GITHUB_ACTIONS_APP_PEM }}
+          APP_ID: ${{ secrets.EMNIFY_GITHUB_ACTIONS_APP_ID }}
+      - name: calculate next version
+        id: version
+        uses: patrickjahns/version-drafter-action@v1
+        env:
+          GITHUB_TOKEN: ${{ steps.get_token.outputs.app_token }}
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ steps.get_token.outputs.app_token }}
+        with:
+          version: ${{ steps.version.outputs.next-version }}

@@ -15,7 +15,7 @@ import (
 //
 func LogMsg(s string) {
 
-	log.Printf("spu_exporter :: %s", fmt.Sprintf("%s", s))
+	log.Printf("spu_exporter :: %s", s)
 }
 
 //

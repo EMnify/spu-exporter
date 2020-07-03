@@ -14,14 +14,14 @@ var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)$`)
 
 func parseLines(lines []string) ([]transport.Transport, error) {
 	transportPattern := regexp.MustCompile(`transport (\d+)`)
-	var currentTransport transport.Transport
+	currentTransport := transport.Transport{}
 	var trans []transport.Transport
 
 	for _, line := range lines {
 		tp := transportPattern.FindStringSubmatch(line)
 
 		if tp != nil {
-			if &currentTransport != nil {
+			if currentTransport.Number != nil {
 				currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
 				currentTransport.CurrentPeer = transport.Peer{}
 				trans = append(trans, currentTransport)
@@ -29,10 +29,10 @@ func parseLines(lines []string) ([]transport.Transport, error) {
 			i64, _ := strconv.ParseInt(tp[1], 10, 64)
 			num := int(i64)
 			currentTransport = transport.Transport{}
-			currentTransport.Number = num
+			*currentTransport.Number = num
 
 		} else {
-			if &currentTransport != nil {
+			if currentTransport.Number != nil {
 				ParseTransport(&currentTransport, line)
 			} else {
 				return nil, nil
@@ -57,11 +57,12 @@ func ParseTransport(t *transport.Transport, line string) {
 			t.ReceiveBuffer = val
 		case "peer":
 			t.CurrentPeer = transport.Peer{}
+			*t.CurrentPeer.Number = val
 			//t.Peers = append(t.Peers, t.CurrentPeer)
 		case "local-port":
 			t.LocalPort = val
 		}
-		if &t.CurrentPeer != nil {
+		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
 		} else {
 			fmt.Println("no peer set")
@@ -82,7 +83,7 @@ func ParseTransport(t *transport.Transport, line string) {
 			t.LocalIp = str[2]
 
 		}
-		if &t.CurrentPeer != nil {
+		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
 		} else {
 			fmt.Println("no peer set")
@@ -93,6 +94,7 @@ func ParseTransport(t *transport.Transport, line string) {
 	}
 	if strings.Contains(line, "client") {
 		t.CurrentPeer = transport.Peer{}
+		*t.CurrentPeer.Number = 0
 	}
 	if strings.Contains(line, "{") {
 		asdf := regexp.MustCompile("[a-z-]+")
@@ -108,7 +110,6 @@ func ParseTransport(t *transport.Transport, line string) {
 	if t.LastKey == "applications" {
 		t.Applications = append(t.Applications, strings.TrimLeft(line, " "))
 	}
-	return
 }
 
 func ParsePeer(p *transport.Peer, line string) {

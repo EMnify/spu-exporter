@@ -16,8 +16,8 @@ type AppConfig struct {
 		Host    string `yaml:"host"`
 		Port    string `yaml:"port"`
 		User    string `yaml:"user"`
-		Keyfile string `yaml:keyfile`
-		Command string `yaml:command`
+		Keyfile string `yaml:"keyfile"`
+		Command string `yaml:"command"`
 	} `yaml:"ssh"`
 	LogLevel string
 }

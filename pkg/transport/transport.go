@@ -1,7 +1,7 @@
 package transport
 
 type Transport struct {
-	Number        int
+	Number        *int
 	OriginHost    string
 	OriginRealm   string
 	Applications  []string
@@ -19,6 +19,7 @@ type Transport struct {
 }
 
 type Peer struct {
+	Number *int64
 	DestinationHost  string
 	DestinationRealm string
 	RemoteIp         string

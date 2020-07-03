@@ -27,14 +27,15 @@ func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport,error){
 	allinOne, _, err := executeScriptOnHost(d.Cfg.Ssh.Host, d.Cfg.Ssh.Port, d.Cfg.Ssh.User, d.Cfg.Ssh.Keyfile, d.Cfg.Ssh.Command)
 
 	if err != nil {
-		level.Error(d.logger).Log("Failed to execute ssh.")
+		level.Error(d.logger).Log("Failed to execute ssh: %s", err)
+		return nil, err
 	}
 
 	lines := strings.Split(allinOne, "\\n")
 
 	trans, err := parseLines(lines)
 	if err != nil {
-		level.Error(d.logger).Log("Error parsing transports")
+		level.Error(d.logger).Log("Error parsing transports: %s", err)
 		return nil, err
 	}
 	return &trans, nil

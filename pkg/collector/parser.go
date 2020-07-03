@@ -25,12 +25,13 @@ func parseLines(lines []string) ([]transport.Transport, error) {
 				currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
 				currentTransport.CurrentPeer = transport.Peer{}
 				trans = append(trans, currentTransport)
+			} else {
+				i64, err := strconv.ParseInt(tp[1], 10, 64)
+				if err != nil {
+					return nil, err
+				}
+				currentTransport = transport.NewTransport(i64)
 			}
-			i64, _ := strconv.ParseInt(tp[1], 10, 64)
-			num := int(i64)
-			currentTransport = transport.Transport{}
-			*currentTransport.Number = num
-
 		} else {
 			if currentTransport.Number != nil {
 				ParseTransport(&currentTransport, line)
@@ -56,8 +57,7 @@ func ParseTransport(t *transport.Transport, line string) {
 		case "receive-buffer":
 			t.ReceiveBuffer = val
 		case "peer":
-			t.CurrentPeer = transport.Peer{}
-			*t.CurrentPeer.Number = val
+			t.CurrentPeer = transport.NewPeer(val)
 			//t.Peers = append(t.Peers, t.CurrentPeer)
 		case "local-port":
 			t.LocalPort = val
@@ -93,8 +93,7 @@ func ParseTransport(t *transport.Transport, line string) {
 		return
 	}
 	if strings.Contains(line, "client") {
-		t.CurrentPeer = transport.Peer{}
-		*t.CurrentPeer.Number = 0
+		t.CurrentPeer = transport.NewPeer(0)
 	}
 	if strings.Contains(line, "{") {
 		asdf := regexp.MustCompile("[a-z-]+")

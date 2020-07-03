@@ -1,7 +1,7 @@
 package transport
 
 type Transport struct {
-	Number        *int
+	Number        *int64
 	OriginHost    string
 	OriginRealm   string
 	Applications  []string
@@ -18,14 +18,22 @@ type Transport struct {
 	CurrentPeer Peer
 }
 
+func NewTransport(number int64) Transport {
+	return Transport{Number: &number}
+}
+
 type Peer struct {
-	Number *int64
+	Number           *int64
 	DestinationHost  string
 	DestinationRealm string
 	RemoteIp         string
 	RemotePort       int64
 	State            State
 	Statistics       Statistics
+}
+
+func NewPeer(number int64) Peer {
+	return Peer{Number: &number}
 }
 
 type State struct {

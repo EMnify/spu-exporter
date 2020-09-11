@@ -10,7 +10,6 @@ import (
 	"github.com/go-kit/kit/log/level"
 )
 
-
 type SpuMetricsDaemon struct {
 	Cfg    *config.AppConfig
 	logger log.Logger
@@ -23,7 +22,7 @@ func NewSpuMetricsDaemon(cfg *config.AppConfig, logger log.Logger) *SpuMetricsDa
 	}
 }
 
-func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport,error){
+func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport, error) {
 	allinOne, _, err := executeScriptOnHost(d.Cfg.Ssh.Host, d.Cfg.Ssh.Port, d.Cfg.Ssh.User, d.Cfg.Ssh.Keyfile, d.Cfg.Ssh.Command)
 
 	if err != nil {

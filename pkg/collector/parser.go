@@ -24,13 +24,13 @@ func parseLines(lines []string) ([]transport.Transport, error) {
 				currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
 				currentTransport.CurrentPeer = transport.Peer{}
 				trans = append(trans, currentTransport)
-			} else {
-				i64, err := strconv.ParseInt(tp[1], 10, 64)
-				if err != nil {
-					return nil, err
-				}
-				currentTransport = transport.NewTransport(i64)
 			}
+			i64, err := strconv.ParseInt(tp[1], 10, 64)
+			if err != nil {
+				return nil, err
+			}
+			currentTransport = transport.NewTransport(i64)
+
 		} else {
 			if currentTransport.Number != nil {
 				ParseTransport(&currentTransport, line)

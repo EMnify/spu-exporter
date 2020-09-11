@@ -1,4 +1,4 @@
-package main
+package prom
 
 import (
 	"strconv"
@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-func createMetricLines(ts *[]transport.Transport) *prometheus.Registry {
+func CreateMetricLines(ts *[]transport.Transport) *prometheus.Registry {
 	reg := prometheus.NewRegistry()
 	labels := []string{"transport", "origin_host", "destination_host", "remote_ip"}
 	state := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_state", Help: "State of the transport (labels okay, waiting, down with 1 or 0)"}, append(labels, "state"))
@@ -62,7 +62,7 @@ func createMetricLines(ts *[]transport.Transport) *prometheus.Registry {
 	}
 	return reg
 }
-func writeToFile(gatherer prometheus.Gatherer, filename string) error {
+func WriteToFile(gatherer prometheus.Gatherer, filename string) error {
 	err := prometheus.WriteToTextfile(filename, gatherer)
 	if err != nil {
 		return err

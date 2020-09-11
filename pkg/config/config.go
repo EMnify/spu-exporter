@@ -11,7 +11,7 @@ import (
 type AppConfig struct {
 	Prometheus struct {
 		Outfile string `yaml:"outfile"`
-	} `yaml:"prometheus"`
+	} `yaml:"prom"`
 	SSH struct {
 		Host    string `yaml:"host"`
 		Port    string `yaml:"port"`

@@ -6,6 +6,7 @@ import (
 
 	"github.com/EMnify/spu-exporter/pkg/collector"
 	"github.com/EMnify/spu-exporter/pkg/config"
+	"github.com/EMnify/spu-exporter/pkg/prom"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
@@ -14,14 +15,17 @@ import (
 
 func main() {
 
-	cfg := config.ReadConfig("config.yml")
+	cfg := config.ReadConfig("configs/config.yml")
 	logger := setupLogging(cfg)
 	d := collector.NewSpuMetricsDaemon(cfg, logger)
 	// Currently config is not read correctly
-	trans, _ := d.ExecuteScrape()
-	// prometheus format
-	reg := createMetricLines(trans)
-	err := writeToFile(prometheus.Gatherers{reg}, cfg.Prometheus.Outfile)
+	trans, err := d.ExecuteScrape()
+	if err != nil {
+		return
+	}
+	// prom format
+	reg := prom.CreateMetricLines(trans)
+	err = prom.WriteToFile(prometheus.Gatherers{reg}, cfg.Prometheus.Outfile)
 	if err != nil {
 		level.Error(logger).Log("Failed to write results to file: %s", err)
 	}

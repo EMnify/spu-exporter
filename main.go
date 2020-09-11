@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func main() {
@@ -20,8 +21,10 @@ func main() {
 	trans, _ := d.ExecuteScrape()
 	// prometheus format
 	reg := createMetricLines(trans)
-	writeToFile(reg, cfg.Prometheus.Outfile)
-
+	err := writeToFile(prometheus.Gatherers{reg}, cfg.Prometheus.Outfile)
+	if err != nil {
+		level.Error(logger).Log("Failed to write results to file: %s", err)
+	}
 }
 
 func setupLogging(cfg *config.AppConfig) log.Logger {

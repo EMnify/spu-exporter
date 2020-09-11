@@ -2,10 +2,11 @@ package collector
 
 import (
 	"fmt"
-	"golang.org/x/crypto/ssh"
 	"io/ioutil"
 	"log"
 	"strings"
+
+	"golang.org/x/crypto/ssh"
 )
 
 // copy from ssh exporter by Nordstrom (https://github.com/Nordstrom/ssh_exporter)
@@ -27,9 +28,8 @@ func SoftCheck(e error) bool {
 	if e != nil {
 		LogMsg(fmt.Sprintf("%v", e))
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 //
@@ -48,9 +48,8 @@ func executeScriptOnHost(host, port, user, keyfile, script string) (string, int,
 		fmt.Sscanf(fmt.Sprintf("%v", err), "Process exited with status %d", &errorStatusCode)
 		if errorStatusCode != 0 {
 			return "", errorStatusCode, err
-		} else {
-			return "", -1, err
 		}
+		return "", -1, err
 	}
 	defer client.Close()
 
@@ -95,10 +94,14 @@ func sshConnectToHost(host, port, user, keyfile string) (*ssh.Client, *ssh.Sessi
 func getKeyFile(keyfile string) (ssh.Signer, error) {
 
 	buf, err := ioutil.ReadFile(keyfile)
-	SoftCheck(err)
+	if SoftCheck(err) {
+		return nil, err
+	}
 
 	key, err := ssh.ParsePrivateKey(buf)
-	SoftCheck(err)
+	if SoftCheck(err) {
+		return nil, err
+	}
 
 	return key, nil
 }

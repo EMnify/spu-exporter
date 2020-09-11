@@ -2,17 +2,17 @@ package config
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
 
+	"gopkg.in/yaml.v3"
 )
 
 type AppConfig struct {
 	Prometheus struct {
 		Outfile string `yaml:"outfile"`
 	} `yaml:"prometheus"`
-	Ssh struct {
+	SSH struct {
 		Host    string `yaml:"host"`
 		Port    string `yaml:"port"`
 		User    string `yaml:"user"`

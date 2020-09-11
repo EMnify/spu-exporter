@@ -2,12 +2,12 @@ package collector
 
 import (
 	"bufio"
-	"fmt"
-	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/EMnify/spu-exporter/pkg/transport"
 )
@@ -77,25 +77,25 @@ func compareTransport(t1, t2 transport.Transport, t *testing.T) {
 }
 
 func comparePeers(p1, p2 transport.Peer, t *testing.T) {
-	assert.Equal(t, p2.RemoteIp, p1.RemoteIp, "RemoteIp expected to be the same")
+	assert.Equal(t, p2.RemoteIP, p1.RemoteIP, "RemoteIP expected to be the same")
 	assert.Equal(t, p2.RemotePort, p1.RemotePort, "RemotePort expected to be the same")
 	assert.Equal(t, p2.DestinationHost, p1.DestinationHost, "DestinationHost expected to be the same")
 	assert.Equal(t, p2.DestinationRealm, p1.DestinationRealm, "DestinationRealm expected to be the same")
 	assert.Equal(t, p2.State, p1.State, "State expected to be the same")
 }
 
-func compareString(s1, s2, name string, diff []string, before bool) (bool, []string) {
-	if s1 != s2 {
-		return false, append(diff, fmt.Sprintf("%s was %s exptected %s", name, s1, s2))
-	}
-	return before, diff
-}
-func compareInt64(s1, s2 int64, name string, diff []string, before bool) (bool, []string) {
-	if s1 != s2 {
-		return false, append(diff, fmt.Sprintf("%s was %d exptected %d", name, s1, s2))
-	}
-	return before, diff
-}
+//func compareString(s1, s2, name string, diff []string, before bool) (bool, []string) {
+//	if s1 != s2 {
+//		return false, append(diff, fmt.Sprintf("%s was %s exptected %s", name, s1, s2))
+//	}
+//	return before, diff
+//}
+//func compareInt64(s1, s2 int64, name string, diff []string, before bool) (bool, []string) {
+//	if s1 != s2 {
+//		return false, append(diff, fmt.Sprintf("%s was %d exptected %d", name, s1, s2))
+//	}
+//	return before, diff
+//}
 
 func testExampleTransports() []transport.Transport {
 	transports := []transport.Transport{}
@@ -107,7 +107,7 @@ func testExampleTransports() []transport.Transport {
 	p1 := transport.NewPeer(0)
 	p1.DestinationRealm = "dest.abc.3gppnetwork.org"
 	p1.DestinationHost = "dest123.abc.3gppnetwork.org"
-	p1.RemoteIp = "12.123.123.123"
+	p1.RemoteIP = "12.123.123.123"
 	p1.RemotePort = 3868
 	p1.State = transport.State{
 		Name:   "okay",
@@ -123,7 +123,7 @@ func testExampleTransports() []transport.Transport {
 	p2 := transport.NewPeer(0)
 	p2.DestinationRealm = "abc.3gppnetwork.org"
 	p2.DestinationHost = "dest2345.abc.3gppnetwork.org"
-	p2.RemoteIp = "12.234.234.234"
+	p2.RemoteIP = "12.234.234.234"
 	p2.RemotePort = 3868
 	p2.State = transport.State{
 		Name:   "okay",

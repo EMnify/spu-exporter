@@ -6,7 +6,7 @@ type Transport struct {
 	OriginRealm   string
 	Applications  []string
 	HostIps       []string
-	LocalIp       string
+	LocalIP       string
 	LocalPort     int64
 	SendBuffer    int64
 	ReceiveBuffer int64
@@ -26,7 +26,7 @@ type Peer struct {
 	Number           *int64
 	DestinationHost  string
 	DestinationRealm string
-	RemoteIp         string
+	RemoteIP         string
 	RemotePort       int64
 	State            State
 	Statistics       Statistics

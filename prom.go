@@ -1,10 +1,11 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/EMnify/spu-exporter/pkg/transport"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"strconv"
 )
 
 func createMetricLines(ts *[]transport.Transport) *prometheus.Registry {
@@ -32,37 +33,39 @@ func createMetricLines(ts *[]transport.Transport) *prometheus.Registry {
 			for _, p := range t.Peers {
 				switch p.State.Name {
 				case "okay":
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "okay").Set(1)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "waiting").Set(0)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "down").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(1)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(0)
 				case "waiting":
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "okay").Set(0)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "waiting").Set(1)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "down").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(1)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(0)
 				case "down":
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "okay").Set(0)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "waiting").Set(0)
-					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp, "down").Set(1)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(1)
 				}
 
 				// receive stats
-				recvCnt.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.ReceiveCnt))
-				recvAvg.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.ReceiveAvg))
-				recvMax.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.ReceiveMax))
-				recvOct.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.ReceiveOct))
-				recvDvi.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.ReceiveDvi))
-				sendAvg.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.SendAvg))
-				sendCnt.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.SendCnt))
-				sendPend.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.SendPending))
-				sendMax.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.SendMax))
-				sendOct.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIp).Set(float64(p.Statistics.SendOct))
+				recvCnt.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.ReceiveCnt))
+				recvAvg.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.ReceiveAvg))
+				recvMax.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.ReceiveMax))
+				recvOct.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.ReceiveOct))
+				recvDvi.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.ReceiveDvi))
+				sendAvg.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.SendAvg))
+				sendCnt.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.SendCnt))
+				sendPend.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.SendPending))
+				sendMax.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.SendMax))
+				sendOct.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP).Set(float64(p.Statistics.SendOct))
 			}
 		}
 	}
 	return reg
 }
-
-func writeToFile(reg *prometheus.Registry, filename string) {
-	gatherer := prometheus.Gatherers{reg}
-	prometheus.WriteToTextfile(filename, gatherer)
+func writeToFile(gatherer prometheus.Gatherer, filename string) error {
+	err := prometheus.WriteToTextfile(filename, gatherer)
+	if err != nil {
+		return err
+	}
+	return nil
 }

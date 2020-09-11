@@ -77,7 +77,7 @@ func ParseTransport(t *transport.Transport, line string) {
 		case "protocol":
 			t.Protocol = str[2]
 		case "local-ip":
-			t.LocalIp = str[2]
+			t.LocalIP = str[2]
 
 		}
 		if t.CurrentPeer.Number != nil {
@@ -147,7 +147,7 @@ func ParsePeer(p *transport.Peer, line string) {
 		case "destination-realm":
 			p.DestinationRealm = str[2]
 		case "remote-ip":
-			p.RemoteIp = str[2]
+			p.RemoteIP = str[2]
 		case "state":
 			p.State.Name = str[2]
 		}

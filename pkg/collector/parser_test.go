@@ -116,16 +116,30 @@ func testExampleTransports() []transport.Transport {
 	t1.Peers = append(peers1, p1)
 	transports = append(transports, t1)
 	t2 := transport.NewTransport(1)
+	t2.OriginHost = "hss.epc.mnc034.mcc123.3gppnetwork.org"
+	t2.OriginRealm = "epc.mnc034.mcc123.3gppnetwork.org"
+	t2.Protocol = "sctp"
+	peers2 := []transport.Peer{}
+	p2 := transport.NewPeer(0)
+	p2.DestinationRealm = "abc.3gppnetwork.org"
+	p2.DestinationHost = "dest2345.abc.3gppnetwork.org"
+	p2.RemoteIp = "12.234.234.234"
+	p2.RemotePort = 3868
+	p2.State = transport.State{
+		Name:   "okay",
+		Number: 0,
+	}
+	t2.Peers = append(peers2, p2)
 
 	transports = append(transports, t2)
-	t3 := transport.NewTransport(1)
-	transports = append(transports, t3)
-	t4 := transport.NewTransport(1)
-	transports = append(transports, t4)
-	t5 := transport.NewTransport(1)
-	transports = append(transports, t5)
-	t6 := transport.NewTransport(1)
-	transports = append(transports, t6)
+	//t3 := transport.NewTransport(1)
+	//transports = append(transports, t3)
+	//t4 := transport.NewTransport(1)
+	//transports = append(transports, t4)
+	//t5 := transport.NewTransport(1)
+	//transports = append(transports, t5)
+	//t6 := transport.NewTransport(1)
+	//transports = append(transports, t6)
 
 	return transports
 }

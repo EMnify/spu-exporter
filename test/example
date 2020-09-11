@@ -1,22 +1,22 @@
 transport 0 {
-  origin-host "hss.epc.mnc043.mcc901.3gppnetwork.org"
-  origin-realm "epc.mnc043.mcc901.3gppnetwork.org"
+  origin-host "hss.epc.mnc012.mcc901.3gppnetwork.org"
+  origin-realm "epc.mnc012.mcc901.3gppnetwork.org"
   applications {
     s6ad
   }
   host-ips {
-    185.57.216.149
+    123.45.123.123
   }
   protocol sctp
-  local-ip 10.100.17.31
+  local-ip 10.200.12.34
   local-port 0
   send-buffer 16384
   receive-buffer 16384
   client {
-    remote-ip 94.102.167.136
+    remote-ip 12.123.123.123
     remote-port 3868
-    destination-host "dra01b11.dra.bics.3gppnetwork.org"
-    destination-realm "dra.bics.3gppnetwork.org"
+    destination-host "dest123.abc.3gppnetwork.org"
+    destination-realm "dest.abc.3gppnetwork.org"
     state okay
     statistics {
       recv-cnt 211558
@@ -33,24 +33,24 @@ transport 0 {
   }
 }
 transport 1 {
-  origin-host "hss.epc.mnc009.mcc295.3gppnetwork.org"
-  origin-realm "epc.mnc009.mcc295.3gppnetwork.org"
+  origin-host "hss.epc.mnc034.mcc123.3gppnetwork.org"
+  origin-realm "epc.mnc034.mcc123.3gppnetwork.org"
   applications {
     s6ad
   }
   host-ips {
-    185.57.216.150
+    123.45.123.124
   }
   protocol sctp
-  local-ip 10.100.17.31
+  local-ip 10.200.12.45
   local-port 0
   send-buffer 16384
   receive-buffer 16384
   client {
-    remote-ip 94.102.167.152
+    remote-ip 12.234.234.234
     remote-port 3868
-    destination-host "dra01b11.dra.bics.3gppnetwork.org"
-    destination-realm "dra.bics.3gppnetwork.org"
+    destination-host "dest2345.abc.3gppnetwork.org"
+    destination-realm "abc.3gppnetwork.org"
     state okay
     statistics {
       recv-cnt 16044
@@ -62,210 +62,6 @@ transport 1 {
       send-max 1872
       send-avg 539
       send-oct 8445560
-      send-pend 0
-    }
-  }
-}
-transport 2 {
-  origin-host "hss.epc.mnc043.mcc901.3gppnetwork.org"
-  origin-realm "epc.mnc043.mcc901.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.216.157
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 0
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 94.102.167.168
-    remote-port 3868
-    destination-host "dra01b22.dra.bics.3gppnetwork.org"
-    destination-realm "dra.bics.3gppnetwork.org"
-    state okay
-    statistics {
-      recv-cnt 218213
-      recv-max 920
-      recv-avg 240
-      recv-oct 52431088
-      recv-dvi 18
-      send-cnt 167015
-      send-max 2472
-      send-avg 243
-      send-oct 40694532
-      send-pend 0
-    }
-  }
-}
-transport 3 {
-  origin-host "hss.epc.mnc009.mcc295.3gppnetwork.org"
-  origin-realm "epc.mnc009.mcc295.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.216.158
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 0
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 94.102.167.184
-    remote-port 3868
-    destination-host "dra01b22.dra.bics.3gppnetwork.org"
-    destination-realm "dra.bics.3gppnetwork.org"
-    state okay
-    statistics {
-      recv-cnt 246704
-      recv-max 832
-      recv-avg 466
-      recv-oct 115206372
-      recv-dvi 2
-      send-cnt 241365
-      send-max 1876
-      send-avg 574
-      send-oct 138568212
-      send-pend 0
-    }
-  }
-}
-transport 4 {
-  origin-host "hss.epc.mnc005.mcc295.3gppnetwork.org"
-  origin-realm "epc.mnc005.mcc295.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.216.227
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 0
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 213.157.140.29
-    remote-port 3868
-    destination-host "wars-tag-dxa-01.spn28834.ipxsp.org"
-    destination-realm "spn28834.ipxsp.org"
-    state okay
-    statistics {
-      recv-cnt 64238
-      recv-max 1236
-      recv-avg 668
-      recv-oct 42918660
-      recv-dvi 0
-      send-cnt 63530
-      send-max 1888
-      send-avg 544
-      send-oct 34564712
-      send-pend 0
-    }
-  }
-}
-transport 5 {
-  origin-host "hss.epc.mnc005.mcc295.3gppnetwork.org"
-  origin-realm "epc.mnc005.mcc295.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.216.228
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 0
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 213.157.140.61
-    remote-port 3868
-    destination-host "lfad-tag-dxa-02.spn28834.ipxsp.org"
-    destination-realm "spn28834.ipxsp.org"
-    state okay
-    statistics {
-      recv-cnt 57523
-      recv-max 1236
-      recv-avg 714
-      recv-oct 41120412
-      recv-dvi 2
-      send-cnt 56798
-      send-max 1888
-      send-avg 567
-      send-oct 32234652
-      send-pend 0
-    }
-  }
-}
-transport 6 {
-  origin-host "hss2.emnify.epc.mnc050.mcc234.3gppnetwork.org"
-  origin-realm "epc.mnc050.mcc234.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.217.126
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 3872
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 185.3.54.33
-    remote-port 9033
-    destination-host "jtdra1.epc.mnc050.mcc234.3gppnetwork.org"
-    destination-realm "epc.mnc050.mcc234.3gppnetwork.org"
-    state okay
-    statistics {
-      recv-cnt 69289
-      recv-max 1244
-      recv-avg 764
-      recv-oct 52973708
-      recv-dvi 1
-      send-cnt 69104
-      send-max 1916
-      send-avg 445
-      send-oct 30813068
-      send-pend 0
-    }
-  }
-}
-transport 7 {
-  origin-host "hss2.emnify.epc.mnc050.mcc234.3gppnetwork.org"
-  origin-realm "epc.mnc050.mcc234.3gppnetwork.org"
-  applications {
-    s6ad
-  }
-  host-ips {
-    185.57.217.127
-  }
-  protocol sctp
-  local-ip 10.100.17.31
-  local-port 3873
-  send-buffer 16384
-  receive-buffer 16384
-  client {
-    remote-ip 185.3.54.35
-    remote-port 9033
-    destination-host "jtdra2.epc.mnc050.mcc234.3gppnetwork.org"
-    destination-realm "epc.mnc050.mcc234.3gppnetwork.org"
-    state okay
-    statistics {
-      recv-cnt 31408
-      recv-max 1244
-      recv-avg 762
-      recv-oct 23935592
-      recv-dvi 0
-      send-cnt 31170
-      send-max 1916
-      send-avg 429
-      send-oct 13395004
       send-pend 0
     }
   }

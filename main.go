@@ -34,22 +34,16 @@ var (
 )
 
 func main() {
-
 	app := &cli.App{
 		Name:    "SpuExporter",
 		Version: fmt.Sprintf("%s (%s)", Version, Revision),
 		Usage:   "spu-exporter",
 	}
+
 	cfgPath := "/opt/spu/exporter-config.yml"
-	app.Flags = []cli.Flag{
-		&cli.StringFlag{
-			Name:        "config",
-			Value:       "/opt/spu/exporter-config.yml",
-			Usage:       "Location of the config file",
-			Destination: &cfgPath,
-		},
+	if len(os.Args) > 1 {
+		cfgPath = os.Args[1]
 	}
-	fmt.Println("logfile: " + cfgPath)
 	cfg := config.ReadConfig(cfgPath)
 	logger := setupLogging(cfg)
 	app.Action = func(c *cli.Context) error {

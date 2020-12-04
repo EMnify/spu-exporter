@@ -1,5 +1,7 @@
 ---
 prometheus:
+  host: 0.0.0.0
+  port: 9770
   outfile: "/tmp/spu_prometheus_metrics"
 ssh:
   host: "localhost"
@@ -7,3 +9,4 @@ ssh:
   keyfile: "/Users/wbauer/workspace/ansible/dev-test/.vagrant/machines/dev/virtualbox/private_key"
   port: 2222
   command: "cat example"
+scrape_interval: 15s

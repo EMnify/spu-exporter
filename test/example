@@ -1,0 +1,68 @@
+transport 0 {
+  origin-host "hss.epc.mnc012.mcc901.3gppnetwork.org"
+  origin-realm "epc.mnc012.mcc901.3gppnetwork.org"
+  applications {
+    s6ad
+  }
+  host-ips {
+    123.45.123.123
+  }
+  protocol sctp
+  local-ip 10.200.12.34
+  local-port 0
+  send-buffer 16384
+  receive-buffer 16384
+  client {
+    remote-ip 12.123.123.123
+    remote-port 3868
+    destination-host "dest123.abc.3gppnetwork.org"
+    destination-realm "dest.abc.3gppnetwork.org"
+    state okay
+    statistics {
+      recv-cnt 211558
+      recv-max 920
+      recv-avg 240
+      recv-oct 50977680
+      recv-dvi 18
+      send-cnt 160386
+      send-max 2492
+      send-avg 241
+      send-oct 38697940
+      send-pend 0
+    }
+  }
+}
+transport 1 {
+  origin-host "hss.epc.mnc034.mcc123.3gppnetwork.org"
+  origin-realm "epc.mnc034.mcc123.3gppnetwork.org"
+  applications {
+    s6ad
+  }
+  host-ips {
+    123.45.123.124
+  }
+  protocol sctp
+  local-ip 10.200.12.45
+  local-port 0
+  send-buffer 16384
+  receive-buffer 16384
+  client {
+    remote-ip 12.234.234.234
+    remote-port 3868
+    destination-host "dest2345.abc.3gppnetwork.org"
+    destination-realm "abc.3gppnetwork.org"
+    state okay
+    statistics {
+      recv-cnt 16044
+      recv-max 828
+      recv-avg 457
+      recv-oct 7339768
+      recv-dvi 2
+      send-cnt 15656
+      send-max 1872
+      send-avg 539
+      send-oct 8445560
+      send-pend 0
+    }
+  }
+}

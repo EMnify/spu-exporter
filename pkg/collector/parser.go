@@ -1,36 +1,38 @@
-package main
+package collector
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/EMnify/spu-exporter/pkg/transport"
 )
 
 var StringFind = regexp.MustCompile(`\s*([a-z-]+) "?([a-zA-Z0-9-\.]+)"?`)
 var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)$`)
 
-func parseLines(lines []string) ([]Transport, error) {
+func parseLines(lines []string) ([]transport.Transport, error) {
 	transportPattern := regexp.MustCompile(`transport (\d+)`)
-	var currentTransport Transport
-	var trans []Transport
+	currentTransport := transport.Transport{}
+	var trans []transport.Transport
 
 	for _, line := range lines {
-		transport := transportPattern.FindStringSubmatch(line)
+		tp := transportPattern.FindStringSubmatch(line)
 
-		if transport != nil {
-			if &currentTransport != nil {
+		if tp != nil {
+			if currentTransport.Number != nil {
 				currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
-				currentTransport.CurrentPeer = Peer{}
+				currentTransport.CurrentPeer = transport.Peer{}
 				trans = append(trans, currentTransport)
 			}
-			i64, _ := strconv.ParseInt(transport[1], 10, 64)
-			num := int(i64)
-			currentTransport = Transport{}
-			currentTransport.Number = num
+			i64, err := strconv.ParseInt(tp[1], 10, 64)
+			if err != nil {
+				return nil, err
+			}
+			currentTransport = transport.NewTransport(i64)
 
 		} else {
-			if &currentTransport != nil {
+			if currentTransport.Number != nil {
 				ParseTransport(&currentTransport, line)
 			} else {
 				return nil, nil
@@ -38,13 +40,13 @@ func parseLines(lines []string) ([]Transport, error) {
 		}
 	}
 	currentTransport.Peers = append(currentTransport.Peers, currentTransport.CurrentPeer)
-	currentTransport.CurrentPeer = Peer{}
+	currentTransport.CurrentPeer = transport.Peer{}
 	trans = append(trans, currentTransport)
 
 	return trans, nil
 }
 
-func ParseTransport(t *Transport, line string) {
+func ParseTransport(t *transport.Transport, line string) {
 	n := IntFind.FindStringSubmatch(line)
 	if n != nil {
 		val, _ := strconv.ParseInt(n[2], 10, 64)
@@ -54,15 +56,13 @@ func ParseTransport(t *Transport, line string) {
 		case "receive-buffer":
 			t.ReceiveBuffer = val
 		case "peer":
-			t.CurrentPeer = Peer{}
+			t.CurrentPeer = transport.NewPeer(val)
 			//t.Peers = append(t.Peers, t.CurrentPeer)
 		case "local-port":
 			t.LocalPort = val
 		}
-		if &t.CurrentPeer != nil {
+		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
-		} else {
-			fmt.Println("no peer set")
 		}
 		return
 	}
@@ -74,23 +74,21 @@ func ParseTransport(t *Transport, line string) {
 			t.OriginHost = str[2]
 		case "origin-realm":
 			t.OriginRealm = str[2]
-		case "protocoll":
+		case "protocol":
 			t.Protocol = str[2]
 		case "local-ip":
-			t.LocalIp = str[2]
+			t.LocalIP = str[2]
 
 		}
-		if &t.CurrentPeer != nil {
+		if t.CurrentPeer.Number != nil {
 			ParsePeer(&t.CurrentPeer, line)
-		} else {
-			fmt.Println("no peer set")
 		}
 
 		t.LastKey = str[1]
 		return
 	}
 	if strings.Contains(line, "client") {
-		t.CurrentPeer = Peer{}
+		t.CurrentPeer = transport.NewPeer(0)
 	}
 	if strings.Contains(line, "{") {
 		asdf := regexp.MustCompile("[a-z-]+")
@@ -106,10 +104,9 @@ func ParseTransport(t *Transport, line string) {
 	if t.LastKey == "applications" {
 		t.Applications = append(t.Applications, strings.TrimLeft(line, " "))
 	}
-	return
 }
 
-func ParsePeer(p *Peer, line string) {
+func ParsePeer(p *transport.Peer, line string) {
 
 	//fmt.Println("parsing inside peer")
 	n := IntFind.FindStringSubmatch(line)
@@ -150,7 +147,7 @@ func ParsePeer(p *Peer, line string) {
 		case "destination-realm":
 			p.DestinationRealm = str[2]
 		case "remote-ip":
-			p.RemoteIp = str[2]
+			p.RemoteIP = str[2]
 		case "state":
 			p.State.Name = str[2]
 		}

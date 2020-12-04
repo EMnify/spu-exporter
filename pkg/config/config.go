@@ -30,7 +30,7 @@ func ReadConfig(filename string) *AppConfig {
 
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Fatalf("failed to read file=%s err=%v ", filename, err)
 	}
 	var cfg AppConfig
 	err = cfg.parse(yamlFile)

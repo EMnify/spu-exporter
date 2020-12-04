@@ -10,8 +10,6 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/EMnify/spu-exporter/pkg/collector"
-	"github.com/EMnify/spu-exporter/pkg/config"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/oklog/run"
@@ -19,6 +17,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/urfave/cli"
+
+	"github.com/EMnify/spu-exporter/pkg/collector"
+	"github.com/EMnify/spu-exporter/pkg/config"
 )
 
 var (
@@ -34,15 +35,23 @@ var (
 
 func main() {
 
-	cfg := config.ReadConfig("configs/config.yml")
-	logger := setupLogging(cfg)
-
 	app := &cli.App{
-		Name:    "FritzExporter",
+		Name:    "SpuExporter",
 		Version: fmt.Sprintf("%s (%s)", Version, Revision),
-		Usage:   "FritzExporter",
+		Usage:   "spu-exporter",
 	}
-
+	cfgPath := "/opt/spu/exporter-config.yml"
+	app.Flags = []cli.Flag{
+		&cli.StringFlag{
+			Name:        "config",
+			Value:       "/opt/spu/exporter-config.yml",
+			Usage:       "Location of the config file",
+			Destination: &cfgPath,
+		},
+	}
+	fmt.Println("logfile: " + cfgPath)
+	cfg := config.ReadConfig(cfgPath)
+	logger := setupLogging(cfg)
 	app.Action = func(c *cli.Context) error {
 		return execute(cfg, logger)
 	}

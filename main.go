@@ -63,9 +63,9 @@ func execute(cfg *config.AppConfig, logger log.Logger) error {
 	d := collector.NewSpuMetricsDaemon(cfg, logger)
 	var g run.Group
 	{
-		logger = log.With(logger, "component", "fritz_exporter")
+		logger = log.With(logger, "component", "spu_exporter")
 		level.Info(logger).Log(
-			"msg", "starting fritzbox exporter",
+			"msg", "starting spu exporter",
 			"version", Version,
 			"revision", Revision,
 			"buildDate", BuildDate,

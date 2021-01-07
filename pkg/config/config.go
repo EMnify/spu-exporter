@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -11,7 +12,9 @@ import (
 type AppConfig struct {
 	Prometheus struct {
 		Outfile string `yaml:"outfile"`
-	} `yaml:"prom"`
+		Host    string `yaml:"host"`
+		Port    string `yaml:"port"`
+	} `yaml:"prometheus"`
 	SSH struct {
 		Host    string `yaml:"host"`
 		Port    string `yaml:"port"`
@@ -19,14 +22,15 @@ type AppConfig struct {
 		Keyfile string `yaml:"keyfile"`
 		Command string `yaml:"command"`
 	} `yaml:"ssh"`
-	LogLevel string
+	LogLevel       string        `yaml:"loglevel"`
+	ScrapeInterval time.Duration `yaml:"scrape_interval"`
 }
 
 func ReadConfig(filename string) *AppConfig {
 
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Fatalf("failed to read file=%s err=%v ", filename, err)
 	}
 	var cfg AppConfig
 	err = cfg.parse(yamlFile)

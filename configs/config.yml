@@ -1,5 +1,7 @@
 ---
 prometheus:
+  host: 0.0.0.0
+  port: 9770
   outfile: "/tmp/spu_prometheus_metrics"
 ssh:
   host: "localhost"
@@ -7,3 +9,4 @@ ssh:
   keyfile: "/opt/spu/etc/ssh/users/admin/id_rsa"
   port: 8822
   command: "show diameter"
+scrape_interval: 15s

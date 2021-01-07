@@ -6,27 +6,47 @@ import (
 	"github.com/EMnify/spu-exporter/pkg/transport"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
-func CreateMetricLines(ts *[]transport.Transport) *prometheus.Registry {
-	reg := prometheus.NewRegistry()
+var (
+	state *prometheus.GaugeVec
+
+	recvCnt *prometheus.GaugeVec
+	recvAvg *prometheus.GaugeVec
+	recvMax *prometheus.GaugeVec
+	recvOct *prometheus.GaugeVec
+	recvDvi *prometheus.GaugeVec
+
+	sendAvg  *prometheus.GaugeVec
+	sendCnt  *prometheus.GaugeVec
+	sendPend *prometheus.GaugeVec
+	sendMax  *prometheus.GaugeVec
+	sendOct  *prometheus.GaugeVec
+)
+
+func RegisterMetrics(reg *prometheus.Registry) {
+
 	labels := []string{"transport", "origin_host", "destination_host", "remote_ip"}
-	state := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_state", Help: "State of the transport (labels okay, waiting, down with 1 or 0)"}, append(labels, "state"))
+	state = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_state", Help: "State of the transport (labels okay, waiting, down with 1 or 0)"}, append(labels, "state"))
 	reg.MustRegister(state)
 
-	recvCnt := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_cnt_total", Help: "Number of packets received by the socket."}, labels)
-	recvAvg := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_avg", Help: "Average size of packets, in bytes, received by the socket."}, labels)
-	recvMax := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_max", Help: "Size of the largest packet, in bytes, received by the socket."}, labels)
-	recvOct := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_oct_total", Help: "Number of bytes received by the socket."}, labels)
-	recvDvi := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_dvi", Help: "Average packet size deviation, in bytes, received by the socket."}, labels)
+	recvCnt = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_cnt_total", Help: "Number of packets received by the socket."}, labels)
+	recvAvg = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_avg", Help: "Average size of packets, in bytes, received by the socket."}, labels)
+	recvMax = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_max", Help: "Size of the largest packet, in bytes, received by the socket."}, labels)
+	recvOct = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_oct_total", Help: "Number of bytes received by the socket."}, labels)
+	recvDvi = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_receive_dvi", Help: "Average packet size deviation, in bytes, received by the socket."}, labels)
 	reg.MustRegister(recvCnt, recvAvg, recvDvi, recvMax, recvOct)
 
-	sendAvg := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_avg", Help: "Average size of packets, in bytes, sent from the socket."}, labels)
-	sendCnt := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_cnt_total", Help: "Number of packets sent from the socket."}, labels)
-	sendPend := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_pending", Help: "Number of bytes waiting to be sent by the socket."}, labels)
-	sendMax := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_max", Help: "Size of the largest packet, in bytes, sent from the socket."}, labels)
-	sendOct := prometheus.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_oct_total", Help: "Number of bytes sent from the socket."}, labels)
+	sendAvg = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_avg", Help: "Average size of packets, in bytes, sent from the socket."}, labels)
+	sendCnt = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_cnt_total", Help: "Number of packets sent from the socket."}, labels)
+	sendPend = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_pending", Help: "Number of bytes waiting to be sent by the socket."}, labels)
+	sendMax = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_max", Help: "Size of the largest packet, in bytes, sent from the socket."}, labels)
+	sendOct = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_oct_total", Help: "Number of bytes sent from the socket."}, labels)
 	reg.MustRegister(sendAvg, sendCnt, sendMax, sendOct, sendPend)
+}
+
+func CreateMetricLines(ts *[]transport.Transport, reg *prometheus.Registry) *prometheus.Registry {
 
 	for _, t := range *ts {
 		if t.OriginHost != "" {

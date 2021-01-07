@@ -1,10 +1,14 @@
 package collector
 
 import (
+	"context"
 	"strings"
+	"time"
 
 	"github.com/EMnify/spu-exporter/pkg/config"
+	"github.com/EMnify/spu-exporter/pkg/prom"
 	"github.com/EMnify/spu-exporter/pkg/transport"
+	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
@@ -13,12 +17,36 @@ import (
 type SpuMetricsDaemon struct {
 	Cfg    *config.AppConfig
 	logger log.Logger
+	reg    *prometheus.Registry
 }
 
 func NewSpuMetricsDaemon(cfg *config.AppConfig, logger log.Logger) *SpuMetricsDaemon {
 	return &SpuMetricsDaemon{
 		Cfg:    cfg,
 		logger: logger,
+		reg:    prometheus.NewRegistry(),
+	}
+}
+
+func (d *SpuMetricsDaemon) Run(ctx context.Context) error {
+	prom.RegisterMetrics(d.reg)
+	for {
+		select {
+		case <-ctx.Done():
+
+			return nil
+		default:
+			scrapeStart := time.Now()
+			trans, err := d.ExecuteScrape()
+			if err != nil {
+				return err
+			}
+			prom.CreateMetricLines(trans, d.reg)
+
+			runtime := time.Since(scrapeStart)
+			level.Debug(d.logger).Log("scrape_duration", runtime)
+			time.Sleep(d.Cfg.ScrapeInterval - runtime)
+		}
 	}
 }
 

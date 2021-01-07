@@ -15,7 +15,12 @@ Currently it is doing it once on call. This behaviour might change in future ver
 Configurable are:
  - the command to be executed on ssh session
  - ssh connection parameters
- - output file 
+ - prometheus metrics host and port
+ - spu scrape interval
+
+## Execution
+
+The path to the config file can be given as first parameter, otherwise it uses /opt/spu/exporter-config
 
 ## Project structure
 

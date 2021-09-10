@@ -9,7 +9,7 @@ import (
 )
 
 var StringFind = regexp.MustCompile(`\s*([a-z-]+) "?([a-zA-Z0-9-\.]+)"?`)
-var IntFind = regexp.MustCompile(`\s*([a-z-]+) (\d+)$`)
+var IntFind = regexp.MustCompile(`\s*([a-z-]+)\s(\d+)$`)
 
 func parseLines(lines []string) ([]transport.Transport, error) {
 	transportPattern := regexp.MustCompile(`transport (\d+)`)

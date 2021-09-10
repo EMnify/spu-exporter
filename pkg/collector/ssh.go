@@ -41,6 +41,8 @@ func executeScriptOnHost(host, port, user, keyfile, script string) (string, int,
 	if SoftCheck(err) {
 		return "", -1, err
 	}
+	defer client.Close()
+	defer session.Close()
 
 	out, err := session.CombinedOutput(script)
 	if SoftCheck(err) {
@@ -51,7 +53,6 @@ func executeScriptOnHost(host, port, user, keyfile, script string) (string, int,
 		}
 		return "", -1, err
 	}
-	defer client.Close()
 
 	return literalFormat(string(out)), 0, nil
 
@@ -112,6 +113,6 @@ func getKeyFile(keyfile string) (ssh.Signer, error) {
 // Turns newline characters into '\n' characters.
 //
 func literalFormat(input string) string {
-
-	return strings.Replace(input, "\n", "\\n", -1)
+	s1 := strings.Replace(input, "\r\n", "\\n", -1)
+	return strings.Replace(s1, "\n", "\\n", -1)
 }

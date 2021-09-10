@@ -64,7 +64,7 @@ func execute(cfg *config.AppConfig, logger log.Logger) error {
 	var g run.Group
 	{
 		logger = log.With(logger, "component", "spu_exporter")
-		level.Info(logger).Log(
+		_ = level.Info(logger).Log(
 			"msg", "starting spu exporter",
 			"version", Version,
 			"revision", Revision,
@@ -76,7 +76,7 @@ func execute(cfg *config.AppConfig, logger log.Logger) error {
 		g.Add(func() error {
 			return d.Run(ctx)
 		}, func(_ error) {
-			level.Info(logger).Log("msg", "shutting down socket server")
+			_ = level.Info(logger).Log("msg", "shutting down socket server")
 		})
 	}
 	{
@@ -103,12 +103,12 @@ func execute(cfg *config.AppConfig, logger log.Logger) error {
 			Handler: m,
 		}
 		g.Add(func() error {
-			level.Info(logger).Log("msg", "starting metrics server", "addr", cfg.Prometheus.Host+":"+cfg.Prometheus.Port)
+			_ = level.Info(logger).Log("msg", "starting metrics server", "addr", cfg.Prometheus.Host+":"+cfg.Prometheus.Port)
 			return s.ListenAndServe()
 		}, func(_ error) {
-			level.Info(logger).Log("msg", "shutting down metric server")
+			_ = level.Info(logger).Log("msg", "shutting down metric server")
 			if err := s.Shutdown(context.Background()); err != nil {
-				level.Error(logger).Log("msg", "error shutting down metrics server", "error", err)
+				_ = level.Error(logger).Log("msg", "error shutting down metrics server", "error", err)
 			}
 		})
 	}

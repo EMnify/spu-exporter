@@ -44,7 +44,7 @@ func (d *SpuMetricsDaemon) Run(ctx context.Context) error {
 			prom.CreateMetricLines(trans, d.reg)
 
 			runtime := time.Since(scrapeStart)
-			level.Debug(d.logger).Log("scrape_duration", runtime)
+			_ = level.Debug(d.logger).Log("scrape_duration", runtime)
 			time.Sleep(d.Cfg.ScrapeInterval - runtime)
 		}
 	}
@@ -54,7 +54,7 @@ func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport, error) {
 	allinOne, _, err := executeScriptOnHost(d.Cfg.SSH.Host, d.Cfg.SSH.Port, d.Cfg.SSH.User, d.Cfg.SSH.Keyfile, d.Cfg.SSH.Command)
 
 	if err != nil {
-		level.Error(d.logger).Log("Failed to execute ssh: %s", err)
+		_ = level.Error(d.logger).Log("Failed to execute ssh: %s", err)
 		return nil, err
 	}
 
@@ -62,7 +62,7 @@ func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport, error) {
 
 	trans, err := parseLines(lines)
 	if err != nil {
-		level.Error(d.logger).Log("Error parsing transports: %s", err)
+		_ = level.Error(d.logger).Log("Error parsing transports: %s", err)
 		return nil, err
 	}
 	return &trans, nil

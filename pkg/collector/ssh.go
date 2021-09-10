@@ -38,12 +38,11 @@ func SoftCheck(e error) bool {
 func executeScriptOnHost(host, port, user, keyfile, script string) (string, int, error) {
 
 	client, session, err := sshConnectToHost(host, port, user, keyfile)
-	defer client.Close()
-	defer session.Close()
-
 	if SoftCheck(err) {
 		return "", -1, err
 	}
+	defer client.Close()
+	defer session.Close()
 
 	out, err := session.CombinedOutput(script)
 	if SoftCheck(err) {

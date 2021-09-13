@@ -51,7 +51,7 @@ func (d *SpuMetricsDaemon) Run(ctx context.Context) error {
 }
 
 func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport, error) {
-	allinOne, _, err := executeScriptOnHost(d.Cfg.SSH.Host, d.Cfg.SSH.Port, d.Cfg.SSH.User, d.Cfg.SSH.Keyfile, d.Cfg.SSH.Command)
+	allinOne, _, err := d.executeScriptOnHost(d.Cfg.SSH.Host, d.Cfg.SSH.Port, d.Cfg.SSH.User, d.Cfg.SSH.Keyfile, d.Cfg.SSH.Command)
 
 	if err != nil {
 		_ = level.Error(d.logger).Log("Failed to execute ssh: %s", err)

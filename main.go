@@ -114,7 +114,7 @@ func execute(cfg *config.AppConfig, logger log.Logger) error {
 	}
 
 	{
-		sig := make(chan os.Signal)
+		sig := make(chan os.Signal, 1)
 		g.Add(func() error {
 			signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 			<-sig

@@ -3,30 +3,22 @@ package collector
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strings"
 
+	"github.com/go-kit/kit/log/level"
 	"golang.org/x/crypto/ssh"
 )
 
 // copy from ssh exporter by Nordstrom (https://github.com/Nordstrom/ssh_exporter)
 
 //
-// LogMsg logs a string to stdout with timestamp.
-//
-func LogMsg(s string) {
-
-	log.Printf("spu_exporter :: %s", s)
-}
-
-//
 // SoftCheck logs non-nil errors to stderr. Used for runtime errors that should
 // not kill the server.
 //
-func SoftCheck(e error) bool {
+func (d *SpuMetricsDaemon) SoftCheck(e error) bool {
 
 	if e != nil {
-		LogMsg(fmt.Sprintf("%v", e))
+		_ = level.Warn(d.logger).Log("message", "Error in ssh connection to spu application", "error", e)
 		return true
 	}
 	return false
@@ -35,17 +27,17 @@ func SoftCheck(e error) bool {
 //
 // executeScriptOnHost executes a given script on a given host.
 //
-func executeScriptOnHost(host, port, user, keyfile, script string) (string, int, error) {
+func (d *SpuMetricsDaemon) executeScriptOnHost(host, port, user, keyfile, script string) (string, int, error) {
 
-	client, session, err := sshConnectToHost(host, port, user, keyfile)
-	if SoftCheck(err) {
+	client, session, err := d.sshConnectToHost(host, port, user, keyfile)
+	if d.SoftCheck(err) {
 		return "", -1, err
 	}
 	defer client.Close()
 	defer session.Close()
 
 	out, err := session.CombinedOutput(script)
-	if SoftCheck(err) {
+	if d.SoftCheck(err) {
 		var errorStatusCode int
 		fmt.Sscanf(fmt.Sprintf("%v", err), "Process exited with status %d", &errorStatusCode)
 		if errorStatusCode != 0 {
@@ -61,10 +53,10 @@ func executeScriptOnHost(host, port, user, keyfile, script string) (string, int,
 //
 // sshConnectToHost connects to a given host with the given keyfile.
 //
-func sshConnectToHost(host, port, user, keyfile string) (*ssh.Client, *ssh.Session, error) {
+func (d *SpuMetricsDaemon) sshConnectToHost(host, port, user, keyfile string) (*ssh.Client, *ssh.Session, error) {
 
-	key, err := getKeyFile(keyfile)
-	SoftCheck(err)
+	key, err := d.getKeyFile(keyfile)
+	d.SoftCheck(err)
 
 	sshConfig := &ssh.ClientConfig{
 		User: user,
@@ -92,15 +84,15 @@ func sshConnectToHost(host, port, user, keyfile string) (*ssh.Client, *ssh.Sessi
 //
 // getKeyFile provides an ssh.Signer for the given keyfile (path to a private key).
 //
-func getKeyFile(keyfile string) (ssh.Signer, error) {
+func (d *SpuMetricsDaemon) getKeyFile(keyfile string) (ssh.Signer, error) {
 
 	buf, err := ioutil.ReadFile(keyfile)
-	if SoftCheck(err) {
+	if d.SoftCheck(err) {
 		return nil, err
 	}
 
 	key, err := ssh.ParsePrivateKey(buf)
-	if SoftCheck(err) {
+	if d.SoftCheck(err) {
 		return nil, err
 	}
 

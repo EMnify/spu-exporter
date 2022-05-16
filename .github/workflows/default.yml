@@ -19,8 +19,8 @@ jobs:
 #          make test
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2.3.0
+        uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.28.3
+          version: v1.45.2
 #      - name: Build release type artifacts
 #        run: make release

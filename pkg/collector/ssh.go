@@ -10,6 +10,21 @@ import (
 )
 
 // copy from ssh exporter by Nordstrom (https://github.com/Nordstrom/ssh_exporter)
+var allowedHostKeyTypes = []string{
+	"ssh-rsa-cert-v01@openssh.com",
+	"ssh-dss-cert-v01@openssh.com",
+	"ecdsa-sha2-nistp256-cert-v01@openssh.com",
+	"ecdsa-sha2-nistp384-cert-v01@openssh.com",
+	"ecdsa-sha2-nistp521-cert-v01@openssh.com",
+	"ssh-ed25519-cert-v01@openssh.com",
+	"ecdsa-sha2-nistp256 ecdsa-sha2-nistp384",
+	"ecdsa-sha2-nistp521",
+	"ssh-rsa",
+	"ssh-dss",
+	"ssh-ed25519",
+	"rsa-sha2-256",
+	"rsa-sha2-512",
+}
 
 //
 // SoftCheck logs non-nil errors to stderr. Used for runtime errors that should
@@ -63,7 +78,8 @@ func (d *SpuMetricsDaemon) sshConnectToHost(host, port, user, keyfile string) (*
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(key),
 		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		HostKeyCallback:   ssh.InsecureIgnoreHostKey(),
+		HostKeyAlgorithms: allowedHostKeyTypes,
 	}
 	sshConfig.SetDefaults()
 

@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/go-kit/kit/log/level"
+	"github.com/go-kit/log/level"
 	"golang.org/x/crypto/ssh"
 )
 

@@ -10,8 +10,8 @@ import (
 	"github.com/EMnify/spu-exporter/pkg/transport"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 )
 
 type SpuMetricsDaemon struct {

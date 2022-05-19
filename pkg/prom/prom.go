@@ -56,14 +56,22 @@ func CreateMetricLines(ts *[]transport.Transport, reg *prometheus.Registry) *pro
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(1)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(0)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "initial").Set(0)
 				case "waiting":
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(0)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(1)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "initial").Set(0)
 				case "down":
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(0)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(0)
 					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(1)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "initial").Set(0)
+				case "initial":
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "okay").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "waiting").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "down").Set(0)
+					state.WithLabelValues(strconv.FormatInt(*t.Number, 10), t.OriginHost, p.DestinationHost, p.RemoteIP, "initial").Set(1)
 				}
 
 				// receive stats

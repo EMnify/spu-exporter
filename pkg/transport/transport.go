@@ -37,7 +37,7 @@ func NewPeer(number int64) Peer {
 }
 
 type State struct {
-	// can be okay, waiting and down
+	// can be okay, waiting, down and initial
 	Name   string
 	Number int
 }

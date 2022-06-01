@@ -33,8 +33,15 @@ var allowedHostKeyTypes = []string{
 func (d *SpuMetricsDaemon) SoftCheck(e error) bool {
 
 	if e != nil {
-		_ = level.Warn(d.logger).Log("message", "Error in ssh connection to spu application", "error", e)
-		return true
+		switch e.(type) {
+		case *ssh.ExitMissingError:
+			// ignore this error, just log on debug, happens just on ubuntu 14
+			level.Debug(d.logger).Log("ExitMissingError", "error", e)
+			return false
+		default:
+			_ = level.Warn(d.logger).Log("message", "Error in ssh connection to spu application", "error", e)
+			return true
+		}
 	}
 	return false
 }

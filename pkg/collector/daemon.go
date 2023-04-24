@@ -15,9 +15,10 @@ import (
 )
 
 type SpuMetricsDaemon struct {
-	Cfg    *config.AppConfig
-	logger log.Logger
-	reg    *prometheus.Registry
+	Cfg       *config.AppConfig
+	logger    log.Logger
+	reg       *prometheus.Registry
+	memStatus *MemoryStatus
 }
 
 func NewSpuMetricsDaemon(cfg *config.AppConfig, logger log.Logger) *SpuMetricsDaemon {
@@ -30,6 +31,17 @@ func NewSpuMetricsDaemon(cfg *config.AppConfig, logger log.Logger) *SpuMetricsDa
 
 func (d *SpuMetricsDaemon) Run(ctx context.Context) error {
 	prom.RegisterMetrics(d.reg)
+	d.memStatus := &MemoryStatus{
+		Total:         0,
+		Processes:     0,
+		ProcessesUsed: 0,
+		System:        0,
+		Atom:          0,
+		AtomUsed:      0,
+		Binary:        0,
+		Code:          0,
+		Ets:           0,
+	}
 	for {
 		select {
 		case <-ctx.Done():
@@ -65,5 +77,13 @@ func (d *SpuMetricsDaemon) ExecuteScrape() (*[]transport.Transport, error) {
 		_ = level.Error(d.logger).Log("Error parsing transports: %s", err)
 		return nil, err
 	}
+
+	memory, _, err := d.executeScriptOnHost(d.Cfg.SSH.Host, d.Cfg.SSH.Port, d.Cfg.SSH.User, d.Cfg.SSH.Keyfile, d.Cfg.SSH.CommandMemory)
+	if err != nil {
+		_ = level.Error(d.logger).Log("Failed to execute ssh: %s", err)
+		return nil, err
+	}
+	d.memStatus.parseMemory(strings.Split(memory, "\\n"))
+
 	return &trans, nil
 }

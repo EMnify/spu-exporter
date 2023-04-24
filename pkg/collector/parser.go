@@ -153,3 +153,54 @@ func ParsePeer(p *transport.Peer, line string) {
 		return
 	}
 }
+
+// > show spu memory
+// total 38618688
+// processes 12618792
+// processes-used 12611160
+// system 25999896
+// atom 721129
+// atom-used 692322
+// binary 713400
+// code 16113574
+// ets 574616
+type MemoryStatus struct {
+	Total         int64
+	Processes     int64
+	ProcessesUsed int64
+	System        int64
+	Atom          int64
+	AtomUsed      int64
+	Binary        int64
+	Code          int64
+	Ets           int64
+}
+
+func (ms *MemoryStatus) parseMemory(lines []string) {
+	for _, l := range lines {
+		str := IntFind.FindStringSubmatch(l)
+		if str != nil {
+			val, _ := strconv.ParseInt(str[2], 10, 64)
+			switch str[1] {
+			case "total":
+				ms.Total = val
+			case "processes":
+				ms.Processes = val
+			case "processes-used":
+				ms.ProcessesUsed = val
+			case "system":
+				ms.System = val
+			case "atom":
+				ms.Atom = val
+			case "atom-used":
+				ms.AtomUsed = val
+			case "binary":
+				ms.Binary = val
+			case "code":
+				ms.Code = val
+			case "ets":
+				ms.Ets = val
+			}
+		}
+	}
+}

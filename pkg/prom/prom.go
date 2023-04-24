@@ -23,6 +23,14 @@ var (
 	sendPend *prometheus.GaugeVec
 	sendMax  *prometheus.GaugeVec
 	sendOct  *prometheus.GaugeVec
+
+	memoryTotal         prometheus.Gauge
+	memoryProcesses     prometheus.Gauge
+	memoryProcessesUsed prometheus.Gauge
+	memoryTotal         prometheus.Gauge
+	memoryTotal         prometheus.Gauge
+	memoryTotal         prometheus.Gauge
+	memoryTotal         prometheus.Gauge
 )
 
 func RegisterMetrics(reg *prometheus.Registry) {
@@ -44,6 +52,17 @@ func RegisterMetrics(reg *prometheus.Registry) {
 	sendMax = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_max", Help: "Size of the largest packet, in bytes, sent from the socket."}, labels)
 	sendOct = promauto.NewGaugeVec(prometheus.GaugeOpts{Name: "spu_transport_send_oct_total", Help: "Number of bytes sent from the socket."}, labels)
 	reg.MustRegister(sendAvg, sendCnt, sendMax, sendOct, sendPend)
+
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryProcesses = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_processes", Help: "Processes size of spu memory, in bytes"})
+	memoryProcessesUsed = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_processes_used", Help: "Processes Used size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+	memoryTotal = promauto.NewGauge(prometheus.GaugeOpts{Name: "spu_memory_total", Help: "Total size of spu memory, in bytes"})
+
 }
 
 func CreateMetricLines(ts *[]transport.Transport, reg *prometheus.Registry) *prometheus.Registry {

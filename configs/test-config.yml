@@ -7,6 +7,7 @@ ssh:
   host: "localhost"
   user: "vagrant"
   keyfile: "/Users/wbauer/workspace/ansible/dev-test/.vagrant/machines/dev/virtualbox/private_key"
-  port: 2222
+  port: 2201
   command: "cat example"
+  command_memory: "cat example_spu_memory"
 scrape_interval: 15s

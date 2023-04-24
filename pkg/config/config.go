@@ -16,11 +16,12 @@ type AppConfig struct {
 		Port    string `yaml:"port"`
 	} `yaml:"prometheus"`
 	SSH struct {
-		Host    string `yaml:"host"`
-		Port    string `yaml:"port"`
-		User    string `yaml:"user"`
-		Keyfile string `yaml:"keyfile"`
-		Command string `yaml:"command"`
+		Host          string `yaml:"host"`
+		Port          string `yaml:"port"`
+		User          string `yaml:"user"`
+		Keyfile       string `yaml:"keyfile"`
+		Command       string `yaml:"command"`
+		CommandMemory string `yaml:"command_memory"`
 	} `yaml:"ssh"`
 	LogLevel       string        `yaml:"loglevel"`
 	ScrapeInterval time.Duration `yaml:"scrape_interval"`

@@ -9,4 +9,5 @@ ssh:
   keyfile: "/opt/spu/etc/ssh/users/admin/id_rsa"
   port: 8822
   command: "show diameter"
+  command_memory: "show spu memory"
 scrape_interval: 15s

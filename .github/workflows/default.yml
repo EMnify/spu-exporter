@@ -14,9 +14,9 @@ jobs:
       - name: Tests
         run: |
           make build
+          make test
 #          make fmt
 #          make vet
-          make test
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3

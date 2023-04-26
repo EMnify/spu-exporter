@@ -57,7 +57,7 @@ func ParseTransport(t *transport.Transport, line string) {
 			t.ReceiveBuffer = val
 		case "peer":
 			if t.CurrentPeer.Number != nil {
-				 t.Peers = append(t.Peers, t.CurrentPeer)
+				t.Peers = append(t.Peers, t.CurrentPeer)
 			}
 			t.CurrentPeer = transport.NewPeer(val)
 		case "local-port":

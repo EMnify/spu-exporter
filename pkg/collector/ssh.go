@@ -26,10 +26,8 @@ var allowedHostKeyTypes = []string{
 	"rsa-sha2-512",
 }
 
-//
 // SoftCheck logs non-nil errors to stderr. Used for runtime errors that should
 // not kill the server.
-//
 func (d *SpuMetricsDaemon) SoftCheck(e error) bool {
 
 	if e != nil {
@@ -46,9 +44,7 @@ func (d *SpuMetricsDaemon) SoftCheck(e error) bool {
 	return false
 }
 
-//
 // executeScriptOnHost executes a given script on a given host.
-//
 func (d *SpuMetricsDaemon) executeScriptOnHost(host, port, user, keyfile, script string) (string, int, error) {
 
 	client, session, err := d.sshConnectToHost(host, port, user, keyfile)
@@ -72,9 +68,7 @@ func (d *SpuMetricsDaemon) executeScriptOnHost(host, port, user, keyfile, script
 
 }
 
-//
 // sshConnectToHost connects to a given host with the given keyfile.
-//
 func (d *SpuMetricsDaemon) sshConnectToHost(host, port, user, keyfile string) (*ssh.Client, *ssh.Session, error) {
 
 	key, err := d.getKeyFile(keyfile)
@@ -104,9 +98,7 @@ func (d *SpuMetricsDaemon) sshConnectToHost(host, port, user, keyfile string) (*
 	return client, session, nil
 }
 
-//
 // getKeyFile provides an ssh.Signer for the given keyfile (path to a private key).
-//
 func (d *SpuMetricsDaemon) getKeyFile(keyfile string) (ssh.Signer, error) {
 
 	buf, err := ioutil.ReadFile(keyfile)
@@ -122,11 +114,9 @@ func (d *SpuMetricsDaemon) getKeyFile(keyfile string) (ssh.Signer, error) {
 	return key, nil
 }
 
-//
 // literalFormat formats a string to be included in an endpoint to be scraped by Prometheus.
 //
 // Turns newline characters into '\n' characters.
-//
 func literalFormat(input string) string {
 	s1 := strings.Replace(input, "\r\n", "\\n", -1)
 	return strings.Replace(s1, "\n", "\\n", -1)
